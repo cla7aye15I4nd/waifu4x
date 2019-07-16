@@ -2,9 +2,12 @@ import os
 
 #input config
 ratio = 4
-batch_size = 128
-image_width = 28
-image_height = 28
+batch_size = 16
+image_width = 96
+image_height = 96
+origin_width = image_width*ratio
+origin_height = image_height*ratio
+
 dim = 3
 
 #data config
