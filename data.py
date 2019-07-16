@@ -15,11 +15,10 @@ class dataSet:
 
     def handler(self, img):
         im = Image.open(img).resize((self.width, self.height), Image.ANTIALIAS)
-        return np.asarray(im)
+        return np.asarray(im) / 255
         
     def batch(self, batch_size = config.batch_size):
-        return [self.handler(os.path.join(self.path, next(self.gen_img)))
-                for i in range(batch_size)]
+        return np.asarray([self.handler(os.path.join(self.path, next(self.gen_img))) for i in range(batch_size)])
 
 def load_data():
     return (dataSet(config.data_train_LR, config.image_width, config.image_height),

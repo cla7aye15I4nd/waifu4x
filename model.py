@@ -1,4 +1,5 @@
 import tensorflow as tf
+import time
 
 import config
 from utils import (Input,
@@ -39,7 +40,7 @@ def Generator(input_shape, is_training):
 
     net = Conv2D(net, 9, 3, 1)
     
-    return net
+    return inputs, net
 
 def Discriminator(input_shape, is_training):
     def discriminator_block(inputs, output_channel, kernel_size, stride, is_training):
@@ -67,13 +68,40 @@ def Discriminator(input_shape, is_training):
     net = Dense(net, 1)
     net = Sigmoid(net)
     
-    return net
+    return inputs, net
         
 
-def SRGAN(is_training):
-    G = Generator(config.G_input_shape, is_training)
-    D = Discriminator(config.G_output_shape, is_training)
-    return G, D
+class SRGAN:
+    def __init__(self, is_training):
+        self.Sess =  tf.compat.v1.Session()
+        self.G_inputs, self.G = Generator(config.G_input_shape, is_training)
+        self.D_inputs, self.D = Discriminator(config.G_output_shape, is_training)
 
+    def Gen(self, inputs):
+        return self.Sess.run([self.G], feed_dict = {self.G_inputs : inputs})
+        
+    def trainG(self, X_train, y_train):
+        for step in range(config.rounds):
+            step_time = time.time()
+
+            imageLR = X_train.batch()
+            labelHR = y_train.batch()
+        
+            with tf.GradientTape() as tape:
+                fakeHR = self.Gen(imageLR)
+
+                print(labelHR.shape)
+                print(fakeHR.get_shape())
+                #mse_loss = tf.losses.mean_squared_error(labelHR, fakeHR)
+
+                #grad = tape.gradient(mse_loss, G.weights)
+                # g_optimizer_init.apply_gradients(zip(grad, G.weights))
+                # step += 1
+                # epoch = step//n_step_epoch
+                # print("Epoch: [{}/{}] step: [{}/{}] time: {}s, mse: {} ".format(
+                #     epoch, n_epoch_init, step, n_step_epoch, time.time() - step_time, mse_loss))
+                # if (epoch != 0) and (epoch % 10 == 0):
+                #    tl.vis.save_images(fake_hr_patchs.numpy(), [ni, ni], save_dir_gan + '/train_g_init_{}.png'.format(epoch))
+                    
 if __name__ == '__main__':
     S = SRGAN(True)
