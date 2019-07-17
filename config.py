@@ -4,6 +4,7 @@ import os
 batch_size = 8
 image_num = 800
 rounds = image_num // batch_size - 1
+rounds_init = rounds // 10
 
 #input config
 ratio = 4
@@ -24,3 +25,7 @@ G_input_shape = [batch_size, image_width, image_height, dim]
 G_output_shape = [batch_size, image_width*ratio, image_height*ratio, dim]
 resblock_num = 16
 subpixel_num = 2
+
+#optimizer config
+lr_init = 1e-4
+beta1 = 0.9

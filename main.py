@@ -13,8 +13,8 @@ if __name__ == '__main__':
 
     SRGAN = model.SRGAN(True)
 
-    init = tf.compat.v1.global_variables_initializer()
-    SRGAN.Sess.run(init)
+    #init = tf.compat.v1.global_variables_initializer()
+    #SRGAN.Sess.run(init)
     
     #init G
     SRGAN.trainG(X_train, y_train) 
