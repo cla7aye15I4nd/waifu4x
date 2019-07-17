@@ -46,6 +46,7 @@ def Generator(input_shape, is_training):
 
         return inputs, net
 
+
 def Discriminator(input_shape, is_training):
     with tf.variable_scope('discriminator'):
         def discriminator_block(inputs, output_channel, kernel_size, stride, is_training):
@@ -74,13 +75,40 @@ def Discriminator(input_shape, is_training):
         net = Sigmoid(net)
 
         return inputs, net
-        
+
+
+def myDiscriminator(inputs, my_reuse, is_training):
+    with tf.variable_scope('discriminator', reuse=my_reuse):
+        def discriminator_block(inputs, output_channel, kernel_size, stride, is_training):
+            net = Conv2D(inputs, kernel_size, output_channel, stride)
+            net = BatchNormal(net, is_training)
+            net = LeakyReLU(net, 0.2)
+            return net
+
+        net = Conv2D(inputs, 3, 64, 1)
+        net = LeakyReLU(net)
+
+        net = discriminator_block(net, 64, 3, 2, is_training)
+        net = discriminator_block(net, 128, 3, 1, is_training)
+        net = discriminator_block(net, 128, 3, 2, is_training)
+        net = discriminator_block(net, 256, 3, 1, is_training)
+        net = discriminator_block(net, 256, 3, 2, is_training)
+        net = discriminator_block(net, 512, 3, 1, is_training)
+        net = discriminator_block(net, 512, 3, 2, is_training)
+
+        net = Dense(Flatten(net), 1024)
+        net = LeakyReLU(net, 0.2)
+
+        net = Dense(net, 1)
+        net = Sigmoid(net)
+
+        return net
 
 class SRGAN:
     def __init__(self, is_training):
         self.Sess = tf.compat.v1.Session()
         self.G_inputs, self.G = Generator(config.G_input_shape, is_training)
-        self.D_inputs, self.D = Discriminator(config.G_output_shape, is_training)
+        #self.D_inputs, self.D = Discriminator(config.G_output_shape, is_training)
 
 #    def Gen(self, inputs):
 #       return self.Sess.run([self.G], feed_dict={self.G_inputs: inputs})[0]
@@ -95,24 +123,46 @@ class SRGAN:
         d_optimizer = tf.train.AdamOptimizer(lr_v, beta1=config.beta1)  # .minimize(d_loss, var_list=d_vars)
 
         t_vars = tf.trainable_variables()
-        d_vars = [var for var in t_vars if 'discriminator' in var.name]
         g_vars = [var for var in t_vars if 'generator' in var.name]
 
+        #self.G_inputs
         G_label = tf.placeholder(dtype=tf.float32, shape=config.G_output_shape)
-        fakeHR = self.G
-        mse_loss = tf.losses.mean_squared_error(G_label, fakeHR)
-        op_step = g_optimizer.minimize(mse_loss, var_list=g_vars)
+        G_fake = self.G
+#初始训练generator操作
 
+        mse_loss = tf.losses.mean_squared_error(G_label, G_fake)
+        op_step = g_optimizer_init.minimize(mse_loss, var_list=g_vars)
+#对抗训练操作
+
+        logits_fake = myDiscriminator(G_fake, False, True)
+        logits_real = myDiscriminator(G_label, True, True)
+        t_vars = tf.trainable_variables()
+        d_vars = [var for var in t_vars if 'discriminator' in var.name]
+
+        d_loss1 = tf.nn.sigmoid_cross_entropy_with_logits(logits=logits_real, labels=tf.ones_like(logits_real))
+        d_loss1 = tf.reduce_mean(d_loss1)
+        d_loss2 = tf.nn.sigmoid_cross_entropy_with_logits(logits=logits_fake, labels=tf.zeros_like(logits_fake))
+        d_loss2 = tf.reduce_mean(d_loss2)
+        d_loss = d_loss1 + d_loss2
+
+        g_gan_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=logits_fake, labels=tf.ones_like(logits_fake))
+        g_gan_loss = 1e-3 * tf.reduce_mean(g_gan_loss)
+        g_loss = g_gan_loss + mse_loss
+
+        op_step_d = d_optimizer.minimize(d_loss, var_list=d_vars)
+        op_step_g = g_optimizer.minimize(g_loss, var_list=g_vars)
+#开始训练
 
         init = tf.compat.v1.global_variables_initializer()
         self.Sess.run(init)
+
         for step in range(config.rounds_init):
             step_time = time.time()
 
             my_imageLR = X_train.batch()
             my_labelHR = y_train.batch()
 
-            step += 1
+            #step += 1
             _, mse_loss_print = self.Sess.run([op_step, mse_loss], feed_dict={self.G_inputs:my_imageLR, G_label:my_labelHR})
             print("step: [{}/{}] time: {}s, mse: {} ".format(
             step, config.rounds_init, time.time() - step_time, mse_loss_print))
@@ -124,33 +174,27 @@ class SRGAN:
 
             imageLR = X_train.batch()
             labelHR = y_train.batch()
+            _, d_loss_print = self.Sess.run([op_step_g, d_loss],
+                                            feed_dict={self.G_inputs:my_imageLR, G_label:my_labelHR})
+            _, mse_loss_print, g_gan_loss_print = self.Sess.run([op_step_d, mse_loss, g_gan_loss],
+                                                                feed_dict={self.G_inputs:my_imageLR, G_label:my_labelHR})
+            # with tf.GradientTape(persistent = True) as tape:
+            #
+            #     g_gan_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits_fake, tf.ones_like(logits_fake))
+            #     g_gan_loss = 1e-3 * tf.reduce_mean(g_gan_loss)
+            #     mse_loss = tf.losses.mean_squared_error(labelHR, fakeHR)
+            #     g_loss = g_gan_loss + mse_loss
+            #
+            #     grad = tape.gradient(d_loss, d_vars)
+            #     op_step_t = d_optimizer.apply_gradients(zip(grad, d_vars))
+            #     _, mse_loss_print, g_gan_loss_print = self.Sess.run([op_step_t, mse_loss, g_gan_loss])
+            #     grad = tape.gradient(g_loss, g_vars)
+            #     op_step_g = g_optimizer.apply_gradients(zip(grad, g_vars))
+            #     _, d_loss_print = self.Sess.run([op_step_g, d_loss])
 
-            with tf.GradientTape(persistent = True) as tape:
-                fakeHR = self.Gen(imageLR)
-                logits_fake = self.Dis(fakeHR)
-                logits_real = self.Dis(labelHR)
-
-                d_loss1 = tf.nn.sigmoid_cross_entropy_with_logits(logits_real, tf.ones_like(logits_real))
-                d_loss1 = tf.reduce_mean(d_loss1)
-                d_loss2 = tf.nn.sigmoid_cross_entropy_with_logits(logits_fake, tf.zeros_like(logits_fake))
-                d_loss2 = tf.reduce_mean(d_loss2)
-                d_loss = d_loss1 + d_loss2
-
-                g_gan_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits_fake, tf.ones_like(logits_fake))
-                g_gan_loss = 1e-3 * tf.reduce_mean(g_gan_loss)
-                mse_loss = tf.losses.mean_squared_error(labelHR, fakeHR)
-                g_loss = g_gan_loss + mse_loss
-
-                grad = tape.gradient(d_loss, d_vars)
-                op_step_t = d_optimizer.apply_gradients(zip(grad, d_vars))
-                _, mse_loss_print, g_gan_loss_print = self.Sess.run([op_step_t, mse_loss, g_gan_loss])
-                grad = tape.gradient(g_loss, g_vars)
-                op_step_g = g_optimizer.apply_gradients(zip(grad, g_vars))
-                _, d_loss_print = self.Sess.run([op_step_g, d_loss])
-
-                step += 1
-                print("step: [{}/{}] time: {}s, g_loss(mse:{},  g_gan_loss:{}) d_loss: {}".format(
-                    step, config.rounds, time.time() - step_time, mse_loss_print, g_gan_loss_print, d_loss_print))
+            #step += 1
+            print("step: [{}/{}] time: {}s, mse_loss(mse:{},  g_gan_loss:{}) d_loss: {}".format(
+                step, config.rounds, time.time() - step_time, mse_loss_print, g_gan_loss_print, d_loss_print))
 
 
 
