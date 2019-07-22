@@ -12,5 +12,11 @@ if __name__ == '__main__':
     X_train, y_train, X_test, y_test = load_data()
 
     SRGAN = model.SRGAN(True)
-    SRGAN.train(X_train, y_train)
+
+    #init = tf.compat.v1.global_variables_initializer()
+    #SRGAN.Sess.run(init)
+    
+    #init G
+    SRGAN.trainG(X_train, y_train) 
+    
     SRGAN.Sess.close()

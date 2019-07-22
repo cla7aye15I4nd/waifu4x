@@ -3,13 +3,14 @@ import os
 #traing config
 batch_size = 8
 image_num = 800
-rounds = image_num // batch_size - 1
-rounds_init = rounds // 10
+rounds_init = 10
+rounds = image_num // batch_size - 1 - rounds_init
+epoch_num = 100
 
 #input config
 ratio = 4
-image_width = 96
-image_height = 96
+image_width = 24
+image_height = 24
 origin_width = image_width*ratio
 origin_height = image_height*ratio
 dim = 3
@@ -32,4 +33,4 @@ beta1 = 0.9
 
 #checkpoint
 checkpoint_dir = os.path.join('data', 'checkpoint')
-model_name = 'srgan.model'
+model_name = 'srgan-model'
