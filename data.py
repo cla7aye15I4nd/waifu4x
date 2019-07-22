@@ -6,6 +6,11 @@ from matplotlib import cm
 from random import randint
 import config
 
+def show(rgb):
+    im = Image.fromarray((rgb * 255).astype('uint8'))
+    im.show()
+
+
 class dataSet:
     def __init__(self, seed, tag, path, width = config.image_width, height = config.image_height):
         self.seed = seed
@@ -16,10 +21,6 @@ class dataSet:
         self.height = height
         self.gen_img = (img for img in self.img_set)
         self.pos = 0
-
-    def show(self, rgb):
-        im = Image.fromarray((rgb * 255).astype('uint8'))
-        im.show()
         
     def handler(self, img):        
         image = Image.open(img)
@@ -31,7 +32,7 @@ class dataSet:
             y *= config.ratio
         self.pos += 1
         im = np.asarray(image.crop((x, y, x + self.width, y + self.height))) / 255
-        self.show(im)
+        return im
         
     def batch(self, batch_size = config.batch_size):
         return np.asarray([self.handler(os.path.join(self.path, next(self.gen_img)))

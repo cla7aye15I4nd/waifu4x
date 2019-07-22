@@ -29,3 +29,7 @@ subpixel_num = 2
 #optimizer config
 lr_init = 1e-4
 beta1 = 0.9
+
+#checkpoint
+checkpoint_dir = os.path.join('data', 'checkpoint')
+model_name = 'srgan.model'
