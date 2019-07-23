@@ -148,15 +148,24 @@ class SRGAN:
                    write_meta_graph=my_write_meta_data)
 
 
-    def load_model(self, Saver):
-        fn = os.path.join(config.checkpoint_dir, config.model_name)
-        if os.path.exists(os.path.join(config.checkpoint_dir, config.model_name+'.index')):
+    def load_model(self, Saver, model_name = 'nomodel'):
+        fn = os.path.join(config.checkpoint_dir, model_name)
+        if os.path.exists(os.path.join(config.checkpoint_dir, model_name+'.index')):
             Saver.restore(self.Sess, fn)
         else:
-
             init = tf.compat.v1.global_variables_initializer()
             self.Sess.run(init)
 
+    def threshold(self, arr):
+        [height, width, dim] = arr.shape
+        for i in range(height):
+            for j in range(width):
+                for k in range(dim):
+                    if arr[i][j][k] >= 255:
+                        arr[i][j][k] = 255
+                    if arr[i][j][k] <= 0:
+                        arr[i][j][k] = 0
+        return arr
 
     def evaluate(self, img, num):
         def change_image_channels(image):
@@ -177,12 +186,15 @@ class SRGAN:
         arr_image = np.asarray(image)/255
         #output1 = Image.fromarray((arr_image * 255).astype('uint8'))
         #output1.show()
-        eva_input = tf.placeholder(dtype=tf.float32, shape=[1, image.width, image.height, config.dim])
+        eva_input = tf.placeholder(dtype=tf.float32, shape=[1, image.height, image.width, config.dim])
         #????????????????????
         eva_output = MyGenerator(eva_input, my_reuse=True, is_training=True)
-        arr_output = self.Sess.run(eva_output, feed_dict={eva_input: [arr_image]})[0]
-        output = Image.fromarray((arr_output*255).astype('uint8'))
-        output.save("result\\output{}.bmp".format(num))
+        arr_output = self.Sess.run(eva_output, feed_dict={eva_input: [arr_image]})[0] * 255
+
+        arr_output = self.threshold(arr_output)
+
+        output = Image.fromarray(arr_output.astype('uint8'))
+        output.save("result\\new.bmp".format(num))
         output.show()
 
     def trainG(self, X_train, y_train):
@@ -225,11 +237,11 @@ class SRGAN:
 
         #my_saver =tf.train.Saver(max_to_keep=5, keep_checkpoint_every_n_hours=0.5)
         my_saver = tf.train.Saver(keep_checkpoint_every_n_hours=0.5)
-        self.load_model(my_saver)
+        self.load_model(my_saver, 'srgan-model-299')
 
 
 
-        self.evaluate("example\\monkeyLR.png", 0)
+        self.evaluate("example\\0802x4.png", 0)
 
 
         for step in range(config.rounds_init):
