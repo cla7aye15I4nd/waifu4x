@@ -114,7 +114,7 @@ test.py
 
 .idea/
 gpuven/
-longterm/checkpoint/srgan-model*
+longterm/checkpoint
 readonly/dataset
 temp/predict/output
 temp/train/output
