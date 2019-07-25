@@ -118,3 +118,4 @@ longterm/checkpoint
 readonly/dataset
 temp/predict/output
 temp/train/output
+config.json
