@@ -1,2 +1,4 @@
-model_checkpoint_path: "srgan-model-1"
-all_model_checkpoint_paths: "srgan-model-1"
+model_checkpoint_path: "srgan-model-16"
+all_model_checkpoint_paths: "srgan-model-14"
+all_model_checkpoint_paths: "srgan-model-15"
+all_model_checkpoint_paths: "srgan-model-16"
