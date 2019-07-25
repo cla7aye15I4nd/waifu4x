@@ -113,7 +113,7 @@ data/
 test.py
 
 .idea/
-gpuenv/
+gpuven/
 longterm/checkpoint/srgan-model*
 readonly/dataset
 temp/predict/output
