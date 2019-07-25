@@ -1,0 +1,4 @@
+{
+    "dataset_path" : "dataset/",
+    "learning_rate" : 1e-3
+}
