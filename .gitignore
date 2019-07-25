@@ -111,3 +111,10 @@ data/
 
 # test
 test.py
+
+.idea/
+gpuenv/
+longterm/checkpoint/srgan-model*
+readonly/dataset
+temp/predict/output
+temp/train/output
