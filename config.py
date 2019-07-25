@@ -46,7 +46,10 @@ train_output = os.path.join('temp', 'train', 'output.json')
 
 config_name = 'config.json'
 sample_image = os.path.join('readonly', 'example', 'sample.png')
-test_image = [sample_image]
+
+test_image = [os.path.join('readonly', 'example', 'sample.png'),
+              os.path.join('readonly', 'example', 'sample1.png'),
+              os.path.join('readonly', 'example', 'sample2.png')]
 
 train_path = os.path.join('temp', 'train')
 predict_path = os.path.join('temp', 'predict')
