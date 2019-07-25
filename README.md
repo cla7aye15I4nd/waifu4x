@@ -1,1 +1,1 @@
-# SRGAN
+# waifu4x
