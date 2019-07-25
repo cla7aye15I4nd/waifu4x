@@ -1,0 +1,3 @@
+model_checkpoint_path: "srgan-model-12"
+all_model_checkpoint_paths: "srgan-model-11"
+all_model_checkpoint_paths: "srgan-model-12"
