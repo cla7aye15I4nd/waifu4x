@@ -119,3 +119,5 @@ readonly/dataset
 temp/predict/output
 temp/train/output
 config.json
+config.json
+longterm/checkpoint/checkpoint
