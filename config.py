@@ -5,7 +5,8 @@ batch_size = 8
 image_num = 1000
 rounds_init = image_num // batch_size
 rounds = image_num // batch_size
-epoch_num = 100
+epoch_num_init = 50
+epoch_num = 2000
 
 #input config
 dim = 3
@@ -45,11 +46,10 @@ test_output = os.path.join('temp', 'predict', 'output.json')
 train_output = os.path.join('temp', 'train', 'output.json')
 
 config_name = 'config.json'
-sample_image = os.path.join('readonly', 'example', 'sample.png')
-
-test_image = [os.path.join('readonly', 'example', 'sample.png'),
-              os.path.join('readonly', 'example', 'sample1.png'),
-              os.path.join('readonly', 'example', 'sample2.png')]
+sample_image = os.path.join('readonly', 'example', 'sample1.png')
+test_image = [sample_image]
 
 train_path = os.path.join('temp', 'train')
 predict_path = os.path.join('temp', 'predict')
+
+log_dir_train = os.path.join('log', 'train')
