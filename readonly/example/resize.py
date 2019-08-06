@@ -1,3 +1,3 @@
 from PIL import Image
 
-Image.open('target.png').resize((256, 256), Image.ANTIALIAS).save('target.png')
+Image.open('sample.png').resize((1024, 1024), Image.BICUBIC).save('target.png')
