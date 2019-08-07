@@ -86,13 +86,15 @@ $$
 
 ## GAN
 
-## 现在可以公开的情报
+## 现在公开的情报
 ### 附加案例1
-<img src="../readonly/example/sample.png" width="1024px" />
-<img src="../readonly/example/fakeHR.png" width="1024px" /> 
+<img src="../readonly/example/sample.png" width="640px" />
+<img src="../readonly/example/fakeHR.png" width="640px" /> 
+
 ### 附加案例2
-<img src="../readonly/example/sample1.png" width="1024px" />
-<img src="../readonly/example/fake1HR.png" width="1024px" /> 
+<img src="../readonly/example/sample1.png" width="640px"/>
+<img src="../readonly/example/fake1HR.png" width="640px" /> 
 ### 附加案例3
-<img src="../readonly/example/sample2.png" width="1024px" />
-<img src="../readonly/example/fake2HR.png" width="1024px" /> 
+<img src="../readonly/example/sample2.png" width="640px" />
+<img src="../readonly/example/fake2HR.png" width="640px" /> 
+
