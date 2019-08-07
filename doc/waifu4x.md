@@ -6,7 +6,7 @@
 
 ​		而我们的项目的功能，就是将一张（或多张）分辨率较低的图像，通过一定的技术手段，生成一张分辨率高的图像。这就是图像超分辨率重建技术。我们有时候保存了有趣的图片/表情包，想要用的时候发现竟然保存的是低像素的版本，这时候我们的项目就能解决这个问题。
 
-
+$\displaystyle\large\Longrightarrow$
 
 ## 模糊的拟合-插值算法
 
@@ -86,10 +86,13 @@ $$
 
 ## GAN
 
-## 现在可公开的情报
-
-| Input                             | 真实的原始图像                    | 虚假的原始图像                      |
-| --------------------------------- | --------------------------------- | ----------------------------------- |
-| ![](../readonly/example/sample.png)  | ![](../readonly/example/fakeHR.png)  | ![](../readonly/example/sampleHR.png) |
-| ![](../readonly/example/sample1.png) | ![](../readonly/example/fake1HR.png) | ![](../readonly/example/sample1HR.png) |
-| ![](../readonly/example/sample2.png) | ![](../readonly/example/fake2HR.png) | ![](../readonly/example/sample2HR.png) |
+## 现在可以公开的情报
+### 附加案例1
+<img src="../readonly/example/sample.png" width="1024px" />
+<img src="../readonly/example/fakeHR.png" width="1024px" /> 
+### 附加案例2
+<img src="../readonly/example/sample1.png" width="1024px" />
+<img src="../readonly/example/fake1HR.png" width="1024px" /> 
+### 附加案例3
+<img src="../readonly/example/sample2.png" width="1024px" />
+<img src="../readonly/example/fake2HR.png" width="1024px" /> 
