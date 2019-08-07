@@ -35,6 +35,5 @@ tensorflow==1.13.1
 tensorflow-estimator==1.13.0
 termcolor==1.1.0
 tqdm==4.32.1
-urllib3==1.22
 Werkzeug==0.15.4
 wincertstore==0.2
