@@ -112,7 +112,7 @@ class SRGAN:
             image = Image.open(img).convert('RGB')
         
             arr_image = np.asarray(image) / 255 * 2 - 1
-            test_input = tf.placeholder(dtype=tf.float32, shape=[1, image.width, image.height, config.dim])
+            test_input = tf.placeholder(dtype=tf.float32, shape=[1, image.height, image.width, config.dim])
             test_output = Generator(test_input, reuse=True, is_training=True)
             output = self.Sess.run(test_output, feed_dict={test_input: [arr_image]})[0]
             output = self.threshold((output + 1) / 2 * 255)
