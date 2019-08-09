@@ -1,3 +1,3 @@
 from PIL import Image
 
-Image.open('sample.png').resize((1024, 1024), Image.BICUBIC).save('target.png')
+Image.open('panda.png').resize((212*4, 238*4), Image.BICUBIC).save('panda_bic.png')
