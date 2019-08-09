@@ -29,10 +29,12 @@
 卷积数学中一种重要的运算。卷积也经常用在图像处理中。因为图像为一个两维结构，所以需要将
 通常的一维卷积进行扩展。
 
-给定一个图像$X \in \mathbb{R}^{M \times N}$, 和一个矩阵$W \in \mathbb{R}^{m\times n}$。卷积的定义为
-$$
-y_{ij}=\sum_{u=1}^m\sum_{v=1}^nw_{uv}\cdot x_{i-u+1,j-v+1}
-$$
+给定一个图像<a href="https://www.codecogs.com/eqnedit.php?latex=X&space;\in&space;\mathbb{R}^{M&space;\times&space;N}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?X&space;\in&space;\mathbb{R}^{M&space;\times&space;N}" title="X \in \mathbb{R}^{M \times N}" /></a>, 和一个矩阵<a href="https://www.codecogs.com/eqnedit.php?latex=W&space;\in&space;\mathbb{R}^{m\times&space;n}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?W&space;\in&space;\mathbb{R}^{m\times&space;n}" title="W \in \mathbb{R}^{m\times n}" /></a>。卷积的定义为
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=y_{ij}=\sum_{u=1}^m\sum_{v=1}^nw_{uv}\cdot&space;x_{i-u&plus;1,j-v&plus;1}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?y_{ij}=\sum_{u=1}^m\sum_{v=1}^nw_{uv}\cdot&space;x_{i-u&plus;1,j-v&plus;1}" title="y_{ij}=\sum_{u=1}^m\sum_{v=1}^nw_{uv}\cdot x_{i-u+1,j-v+1}" /></a>
+
+
+
 这是卷积的一个实例：
 
 考虑一个像素值仅为0和1的5 × 5大小的图像
