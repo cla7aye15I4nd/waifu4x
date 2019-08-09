@@ -299,6 +299,11 @@ VGGNet采用连续的几个3x3卷积核代替常见的大卷积核（11x11，7x7
 
 ​       我们将其称为对抗损失（Adversarial Loss）
 
+### Why GAN help?
+​       
+
+
+
 ### 题外话：GAN与博弈论
 
 ![img](./clip_image039.jpg)
