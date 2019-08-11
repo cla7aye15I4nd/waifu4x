@@ -349,7 +349,7 @@ VGGNet采用连续的几个3x3卷积核代替常见的大卷积核（11x11，7x7
 
 **output[2]** ： <img src="./img/display/fake1HR.png" height="640px" width="640px" /> 
 
-#### 比较
+#### 比较（传统SRCNN与SRGAN）
 
 | Origin                        | SRGAN | SRCNN |
 | ----------------------------- | ----- | ----- |
