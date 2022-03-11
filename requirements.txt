@@ -20,7 +20,7 @@ mkl-random==1.0.2
 mock==3.0.5
 mxnet==1.4.1
 numpy==1.16.2
-Pillow==6.1.0
+Pillow==9.0.1
 protobuf==3.8.0
 pyparsing==2.4.0
 pyreadline==2.1
